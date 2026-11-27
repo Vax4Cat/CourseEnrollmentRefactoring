@@ -12,7 +12,7 @@ public class EnrollSvc {
 
     public void add(Student student, Course course){
         // duplicated null check
-        validateParameters(student, course);
+        validateParameters(course, student);
 
         // check exists
         if(isEnrolled(student, course)){
@@ -47,7 +47,7 @@ public class EnrollSvc {
         return enrollmentExists;
     }
 
-    private static void validateParameters(Student student, Course course) {
+    private static void validateParameters(Course course, Student student) {
         if(student == null){
             throw new IllegalArgumentException("null");
         }
@@ -57,7 +57,7 @@ public class EnrollSvc {
     }
 
     public void remove(Student student, Course course){
-        validateParameters(student, course);
+        validateParameters(course, student);
         if(!isEnrolled(student, course)){
             throw new NotEnrolledException("no");
         }
