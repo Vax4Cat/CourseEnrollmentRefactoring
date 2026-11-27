@@ -28,10 +28,10 @@ class EnrollSvcTest {
     void testAddSuccess() {
         service.add(student, course);
 
-        assertEquals(1, service.recs.size());
-        assertEquals(student, service.recs.get(0).student());
-        assertEquals(course, service.recs.get(0).course());
-        assertNotNull(service.recs.get(0).getEnrollmentTime());
+        assertEquals(1, service.enrollmentRecords.size());
+        assertEquals(student, service.enrollmentRecords.get(0).student());
+        assertEquals(course, service.enrollmentRecords.get(0).course());
+        assertNotNull(service.enrollmentRecords.get(0).getEnrollmentTime());
     }
 
     // 测试重复选课
@@ -42,7 +42,7 @@ class EnrollSvcTest {
         assertThrows(EnrollmentConflictException.class,
                 () -> service.add(student, course));
 
-        assertEquals(1, service.recs.size());
+        assertEquals(1, service.enrollmentRecords.size());
     }
 
     // 测试选课时学生为空
@@ -51,7 +51,7 @@ class EnrollSvcTest {
         assertThrows(IllegalArgumentException.class,
                 () -> service.add(null, course));
 
-        assertTrue(service.recs.isEmpty());
+        assertTrue(service.enrollmentRecords.isEmpty());
     }
 
     // 测试选课时课程为空
@@ -60,7 +60,7 @@ class EnrollSvcTest {
         assertThrows(IllegalArgumentException.class,
                 () -> service.add(student, null));
 
-        assertTrue(service.recs.isEmpty());
+        assertTrue(service.enrollmentRecords.isEmpty());
     }
 
     // 测试课程容量上限
@@ -71,12 +71,12 @@ class EnrollSvcTest {
             service.add(s, course);
         }
 
-        assertEquals(30, service.recs.size());
+        assertEquals(30, service.enrollmentRecords.size());
 
         assertThrows(CourseFullException.class,
                 () -> service.add(student, course));
 
-        assertEquals(30, service.recs.size());
+        assertEquals(30, service.enrollmentRecords.size());
     }
 
     // 测试正常退课
@@ -85,7 +85,7 @@ class EnrollSvcTest {
         service.add(student, course);
         service.remove(student, course);
 
-        assertTrue(service.recs.isEmpty());
+        assertTrue(service.enrollmentRecords.isEmpty());
     }
 
     // 测试未选课时退课
@@ -94,7 +94,7 @@ class EnrollSvcTest {
         assertThrows(NotEnrolledException.class,
                 () -> service.remove(student, course));
 
-        assertTrue(service.recs.isEmpty());
+        assertTrue(service.enrollmentRecords.isEmpty());
     }
 
     // 测试退课时学生为空
@@ -118,6 +118,6 @@ class EnrollSvcTest {
         service.remove(student, course);
         service.add(student, course);
 
-        assertEquals(1, service.recs.size());
+        assertEquals(1, service.enrollmentRecords.size());
     }
 }

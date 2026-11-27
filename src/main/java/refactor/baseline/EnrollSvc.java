@@ -1,4 +1,5 @@
 package refactor.baseline;
+
 import refactor.common.*;
 import refactor.common.exception.*;
 import java.util.ArrayList;
@@ -6,57 +7,57 @@ import java.util.List;
 import java.time.LocalDateTime;
 
 public class EnrollSvc {
-    List<EnrollmentRecord> recs = new ArrayList<>();
+    List<EnrollmentRecord> enrollmentRecords = new ArrayList<>();
 
-    public void add(Student s, Course c){
+    public void add(Student student, Course course){
         // duplicated null check
-        if(s == null){
+        if(student == null){
             throw new IllegalArgumentException("null");
         }
-        if(c == null){
+        if(course == null){
             throw new IllegalArgumentException("null");
         }
 
         // check exists
-        boolean f = false;
-        for(var r : recs){
-            if(r.student().equals(s) && r.course().equals(c)){
-                f = true;
+        boolean enrollmentExists = false;
+        for(var record : enrollmentRecords){
+            if(record.student().equals(student) && record.course().equals(course)){
+                enrollmentExists = true;
             }
         }
-        if(f){
+        if(enrollmentExists){
             throw new EnrollmentConflictException("conflict");
         }
 
         // count
-        int cnt = 0;
-        for(var r : recs){
-            if(r.course().equals(c)) cnt++;
+        int enrollmentCount = 0;
+        for(var record : enrollmentRecords){
+            if(record.course().equals(course)) enrollmentCount++;
         }
-        if(cnt >= 30){ // magic number, default capacity
+        if(enrollmentCount >= 30){ // magic number, default capacity
             throw new CourseFullException("full");
         }
 
-        recs.add(new EnrollmentRecord(s,c, LocalDateTime.now()));
+        enrollmentRecords.add(new EnrollmentRecord(student,course, LocalDateTime.now()));
         System.out.println("ok"); // mixed IO with service logic
     }
 
-    public void remove(Student s, Course c){
-        if(s == null){
+    public void remove(Student student, Course course){
+        if(student == null){
             throw new IllegalArgumentException("null");
         }
-        if(c == null){
+        if(course == null){
             throw new IllegalArgumentException("null");
         }
-        boolean f = false;
-        for(var r : recs){
-            if(r.student().equals(s) && r.course().equals(c)){
-                f = true;
+        boolean enrollmentExists = false;
+        for(var record : enrollmentRecords){
+            if(record.student().equals(student) && record.course().equals(course)){
+                enrollmentExists = true;
             }
         }
-        if(!f){
+        if(!enrollmentExists){
             throw new NotEnrolledException("no");
         }
-        recs.removeIf(r -> r.student().equals(s) && r.course().equals(c));
+        enrollmentRecords.removeIf(r -> r.student().equals(student) && r.course().equals(course));
     }
 }
