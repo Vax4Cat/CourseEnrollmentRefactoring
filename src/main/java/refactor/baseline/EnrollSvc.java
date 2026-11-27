@@ -23,7 +23,8 @@ public class EnrollSvc {
         // count
         validateCapacity(course);
 
-        enrollmentRecords.add(new EnrollmentRecord(student,course, LocalDateTime.now()));
+        LocalDateTime enrollmentTime = LocalDateTime.now();
+        enrollmentRecords.add(new EnrollmentRecord(student,course, enrollmentTime));
         System.out.println("ok"); // mixed IO with service logic
     }
 
