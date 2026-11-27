@@ -41,7 +41,7 @@ public class EnrollSvc {
     private boolean isEnrolled(Student student, Course course) {
         boolean enrollmentExists = false;
         for(var record : enrollmentRecords){
-            if(record.student().equals(student) && record.course().equals(course)){
+            if(record.matchesEnrollment(student, course)){
                 enrollmentExists = true;
             }
         }
@@ -63,6 +63,6 @@ public class EnrollSvc {
         if(!enrollmentExists){
             throw new NotEnrolledException("no");
         }
-        enrollmentRecords.removeIf(r -> r.student().equals(student) && r.course().equals(course));
+        enrollmentRecords.removeIf(record -> record.matchesEnrollment(student, course));
     }
 }

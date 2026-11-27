@@ -112,4 +112,8 @@ public class EnrollmentRecord {
     public Course course() {
         return course;
     }
+
+    public boolean matchesEnrollment(Student student, Course course) {
+        return student().equals(student) && course().equals(course);
+    }
 }
