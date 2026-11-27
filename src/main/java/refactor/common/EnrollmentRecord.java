@@ -1,13 +1,14 @@
 package refactor.common;
 
-import refactor.common.exception.InvalidEntityException;
-
 import java.time.LocalDateTime;
+import refactor.common.exception.InvalidEntityException;
 
 /**
  * Immutable enrollment record ADT.
  * Rep invariant: student, course and enrollmentTime
  * are all non-null.
+ *
+ * @author Vax4Cat
  */
 public class EnrollmentRecord {
 
@@ -17,10 +18,13 @@ public class EnrollmentRecord {
 
     /**
      * Create an enrollment record.
+     *
+     * @param student the student
+     * @param course  the course
+     * @throws InvalidEntityException if student or course is null
      * @requires student != null and course != null
      * @modifies this
      * @effects create an enrollment record with current time
-     * @throws InvalidEntityException if student or course is null
      */
     public EnrollmentRecord(Student student, Course course) {
         if (student == null || course == null) {
@@ -36,10 +40,14 @@ public class EnrollmentRecord {
 
     /**
      * Create an enrollment record with a specified time.
+     *
+     * @param student        the student
+     * @param course         the course
+     * @param enrollmentTime the enrollment timestamp
+     * @throws InvalidEntityException if any parameter is null
      * @requires student, course and enrollmentTime are non-null
      * @modifies this
      * @effects initialize a new enrollment record
-     * @throws InvalidEntityException if any parameter is null
      */
     public EnrollmentRecord(Student student, Course course,
                             LocalDateTime enrollmentTime) {
@@ -66,10 +74,11 @@ public class EnrollmentRecord {
 
     /**
      * Get the student.
+     *
+     * @return student
      * @requires true
      * @modifies nothing
      * @effects no side effects
-     * @return student
      */
     public Student getStudent() {
         return student;
@@ -77,10 +86,11 @@ public class EnrollmentRecord {
 
     /**
      * Get the course.
+     *
+     * @return course
      * @requires true
      * @modifies nothing
      * @effects no side effects
-     * @return course
      */
     public Course getCourse() {
         return course;
@@ -88,10 +98,11 @@ public class EnrollmentRecord {
 
     /**
      * Get enrollment time.
+     *
+     * @return enrollment timestamp
      * @requires true
      * @modifies nothing
      * @effects no side effects
-     * @return enrollment timestamp
      */
     public LocalDateTime getEnrollmentTime() {
         return enrollmentTime;
@@ -99,7 +110,11 @@ public class EnrollmentRecord {
 
     /**
      * Get the student.
+     *
      * @return student
+     * @requires true
+     * @modifies nothing
+     * @effects no side effects
      */
     public Student student() {
         return student;
@@ -107,12 +122,26 @@ public class EnrollmentRecord {
 
     /**
      * Get the course.
+     *
      * @return course
+     * @requires true
+     * @modifies nothing
+     * @effects no side effects
      */
     public Course course() {
         return course;
     }
 
+    /**
+     * Check whether this record matches the given student and course.
+     *
+     * @param student the student to match
+     * @param course  the course to match
+     * @return true if both match, otherwise false
+     * @requires true
+     * @modifies nothing
+     * @effects compare the student and course using their equals methods
+     */
     public boolean matchesEnrollment(Student student, Course course) {
         return student().equals(student) && course().equals(course);
     }
