@@ -15,8 +15,7 @@ public class EnrollSvc {
         validateParameters(student, course);
 
         // check exists
-        boolean enrollmentExists = isEnrolled(student, course);
-        if(enrollmentExists){
+        if(isEnrolled(student, course)){
             throw new EnrollmentConflictException("conflict");
         }
 
@@ -59,8 +58,7 @@ public class EnrollSvc {
 
     public void remove(Student student, Course course){
         validateParameters(student, course);
-        boolean enrollmentExists = isEnrolled(student, course);
-        if(!enrollmentExists){
+        if(!isEnrolled(student, course)){
             throw new NotEnrolledException("no");
         }
         enrollmentRecords.removeIf(record -> record.matchesEnrollment(student, course));
