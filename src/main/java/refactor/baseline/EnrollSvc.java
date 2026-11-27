@@ -7,6 +7,7 @@ import java.util.List;
 import java.time.LocalDateTime;
 
 public class EnrollSvc {
+    private static final int DEFAULT_CAPACITY = 30;
     List<EnrollmentRecord> enrollmentRecords = new ArrayList<>();
 
     public void add(Student student, Course course){
@@ -31,7 +32,7 @@ public class EnrollSvc {
         for(var record : enrollmentRecords){
             if(record.course().equals(course)) enrollmentCount++;
         }
-        if(enrollmentCount >= 30){ // magic number, default capacity
+        if(enrollmentCount >= DEFAULT_CAPACITY){ // magic number, default capacity
             throw new CourseFullException("full");
         }
     }
