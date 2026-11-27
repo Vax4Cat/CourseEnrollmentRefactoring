@@ -11,25 +11,22 @@ public class EnrollSvc {
 
     public void add(Student student, Course course){
         // duplicated null check
-        if(student == null){
-            throw new IllegalArgumentException("null");
-        }
-        if(course == null){
-            throw new IllegalArgumentException("null");
-        }
+        validateParameters(student, course);
 
         // check exists
-        boolean enrollmentExists = false;
-        for(var record : enrollmentRecords){
-            if(record.student().equals(student) && record.course().equals(course)){
-                enrollmentExists = true;
-            }
-        }
+        boolean enrollmentExists = isEnrolled(student, course);
         if(enrollmentExists){
             throw new EnrollmentConflictException("conflict");
         }
 
         // count
+        validateCapacity(course);
+
+        enrollmentRecords.add(new EnrollmentRecord(student,course, LocalDateTime.now()));
+        System.out.println("ok"); // mixed IO with service logic
+    }
+
+    private void validateCapacity(Course course) {
         int enrollmentCount = 0;
         for(var record : enrollmentRecords){
             if(record.course().equals(course)) enrollmentCount++;
@@ -37,24 +34,30 @@ public class EnrollSvc {
         if(enrollmentCount >= 30){ // magic number, default capacity
             throw new CourseFullException("full");
         }
-
-        enrollmentRecords.add(new EnrollmentRecord(student,course, LocalDateTime.now()));
-        System.out.println("ok"); // mixed IO with service logic
     }
 
-    public void remove(Student student, Course course){
-        if(student == null){
-            throw new IllegalArgumentException("null");
-        }
-        if(course == null){
-            throw new IllegalArgumentException("null");
-        }
+    private boolean isEnrolled(Student student, Course course) {
         boolean enrollmentExists = false;
         for(var record : enrollmentRecords){
             if(record.student().equals(student) && record.course().equals(course)){
                 enrollmentExists = true;
             }
         }
+        return enrollmentExists;
+    }
+
+    private static void validateParameters(Student student, Course course) {
+        if(student == null){
+            throw new IllegalArgumentException("null");
+        }
+        if(course == null){
+            throw new IllegalArgumentException("null");
+        }
+    }
+
+    public void remove(Student student, Course course){
+        validateParameters(student, course);
+        boolean enrollmentExists = isEnrolled(student, course);
         if(!enrollmentExists){
             throw new NotEnrolledException("no");
         }
